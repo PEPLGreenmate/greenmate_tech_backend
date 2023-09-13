@@ -1,0 +1,10 @@
+spring:
+  datasource:
+    #url: jdbc:mariadb://{DB IP주소}:3306/{데이터베이스이름}
+    username: root
+    password:
+    driver-class-name: org.mariadb.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: none
