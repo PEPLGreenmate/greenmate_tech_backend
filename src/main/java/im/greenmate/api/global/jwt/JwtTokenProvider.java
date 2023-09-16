@@ -25,15 +25,13 @@ public class JwtTokenProvider {
 
     private final Key key;
     private final String issuer;
-
     private final Long accessTokenValidityInMilliseconds;
     private final Long refreshTokenValidityInMilliseconds;
 
-
     public JwtTokenProvider(@Value("${jwt.secret}") String secretKey,
-                            @Value("${token.issuer}") String issuer,
-                            @Value("${token.access-token-expiration-seconds}") Long accessTokenExpirationSeconds,
-                            @Value("${token.refresh-token-expiration-seconds}") Long refreshTokenExpirationSeconds) {
+                            @Value("${jwt.issuer}") String issuer,
+                            @Value("${jwt.access-token-expiration-seconds}") Long accessTokenExpirationSeconds,
+                            @Value("${jwt.refresh-token-expiration-seconds}") Long refreshTokenExpirationSeconds) {
         this.accessTokenValidityInMilliseconds = accessTokenExpirationSeconds * 1000;
         this.refreshTokenValidityInMilliseconds = refreshTokenExpirationSeconds * 1000;
         this.issuer = issuer;
