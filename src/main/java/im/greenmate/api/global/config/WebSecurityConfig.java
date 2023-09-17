@@ -1,5 +1,8 @@
 package im.greenmate.api.global.config;
 
+import im.greenmate.api.global.util.JwtTokenProvider;
+import im.greenmate.api.global.security.JwtAuthenticationFilter;
+import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -9,6 +12,7 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -19,7 +23,10 @@ import java.util.stream.Stream;
 
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class WebSecurityConfig {
+
+    private final JwtTokenProvider jwtTokenProvider;
 
     private static final String[] PERMIT_ALL_PATTERNS = new String[]{
             "/"
@@ -42,6 +49,7 @@ public class WebSecurityConfig {
                         ).permitAll()
                         .requestMatchers(AntPathRequestMatcher.antMatcher("/api/**")).authenticated()
                 )
+                .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
 
