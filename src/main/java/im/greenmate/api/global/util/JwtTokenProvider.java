@@ -1,5 +1,6 @@
-package im.greenmate.api.global.jwt;
+package im.greenmate.api.global.util;
 
+import im.greenmate.api.domain.jwt.dto.TokenInfo;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;

@@ -1,6 +1,6 @@
 package im.greenmate.api.global.security;
 
-import im.greenmate.api.global.jwt.JwtTokenProvider;
+import im.greenmate.api.global.util.JwtTokenProvider;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.ServletRequest;

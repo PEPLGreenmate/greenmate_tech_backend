@@ -1,6 +1,6 @@
 package im.greenmate.api.global.config;
 
-import im.greenmate.api.global.jwt.JwtTokenProvider;
+import im.greenmate.api.global.util.JwtTokenProvider;
 import im.greenmate.api.global.security.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;

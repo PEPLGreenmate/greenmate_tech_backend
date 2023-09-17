@@ -1,4 +1,4 @@
-package im.greenmate.api.global.jwt;
+package im.greenmate.api.domain.jwt.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
