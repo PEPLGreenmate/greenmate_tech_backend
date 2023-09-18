@@ -18,21 +18,22 @@ public enum ErrorCode {
     BAD_REQUEST(HttpStatus.BAD_REQUEST, "C007", "Bad Request"),
 
     // Authentication
-    EMPTY_AUTHORIZATION(HttpStatus.UNAUTHORIZED, "A001", "Authorization Header가 빈 값입니다."),
-    NOT_BEARER_GRANT_TYPE(HttpStatus.UNAUTHORIZED, "A002", "인증 타입이 Bearer 타입이 아닙니다."),
-    INVALID_TOKEN(HttpStatus.UNAUTHORIZED, "A003", "유효하지 않은 토큰입니다."),
-    EXPIRED_TOKEN(HttpStatus.UNAUTHORIZED, "A004", "만료된 토큰입니다."),
-    UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "A005", "Unauthorized"),
-    INVALID_TOKEN_TYPE(HttpStatus.UNAUTHORIZED, "A006", "잘못된 토큰 타입입니다."),
+    INVALID_AUTHENTICATION(HttpStatus.UNAUTHORIZED, "A001", "잘못된 로그인 정보입니다."),
+    EMPTY_AUTHORIZATION(HttpStatus.UNAUTHORIZED, "A002", "Authorization Header가 빈 값입니다."),
+    NOT_BEARER_GRANT_TYPE(HttpStatus.UNAUTHORIZED, "A003", "인증 타입이 Bearer 타입이 아닙니다."),
+    INVALID_TOKEN(HttpStatus.UNAUTHORIZED, "A004", "유효하지 않은 토큰입니다."),
+    EXPIRED_TOKEN(HttpStatus.UNAUTHORIZED, "A005", "만료된 토큰입니다."),
+    UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "A006", "Unauthorized"),
+    INVALID_TOKEN_TYPE(HttpStatus.UNAUTHORIZED, "A007", "잘못된 토큰 타입입니다."),
 
     // User
     DUPLICATE_NICKNAME(HttpStatus.BAD_REQUEST, "U001", "이미 등록된 닉네임입니다."),
-    USER_NOT_FOUND(HttpStatus.NOT_FOUND, "U004", "유저를 찾을 수 없습니다."),
-    USER_ALREADY_EXISTS(HttpStatus.BAD_REQUEST, "U001", "이미 등록된 유저입니다."),
+    USER_NOT_FOUND(HttpStatus.NOT_FOUND, "U002", "유저를 찾을 수 없습니다."),
+    USER_ALREADY_EXISTS(HttpStatus.BAD_REQUEST, "U003", "이미 등록된 유저입니다."),
 
     // Refresh Token
-    REFRESH_TOKEN_NOT_FOUND(HttpStatus.NOT_FOUND, "R304", "refresh 토큰을 찾을 수 없습니다."),
-    INVALID_REFRESH_TOKEN(HttpStatus.UNAUTHORIZED, "R301", "유효하지 않은 refresh 토큰입니다."),
+    REFRESH_TOKEN_NOT_FOUND(HttpStatus.NOT_FOUND, "R004", "refresh 토큰을 찾을 수 없습니다."),
+    INVALID_REFRESH_TOKEN(HttpStatus.UNAUTHORIZED, "R001", "유효하지 않은 refresh 토큰입니다."),
 
     ;
 
