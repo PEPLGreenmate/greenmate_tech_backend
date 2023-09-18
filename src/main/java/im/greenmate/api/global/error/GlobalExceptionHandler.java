@@ -3,6 +3,7 @@ package im.greenmate.api.global.error;
 import im.greenmate.api.global.error.exception.BusinessException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.validation.BindException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -54,6 +55,11 @@ public class GlobalExceptionHandler {
         return ErrorResponse.toResponseEntity(ErrorCode.ACCESS_DENIED);
     }
 
+    @ExceptionHandler(AuthenticationException.class)
+    public ResponseEntity<?> handleAuthenticationException(AuthenticationException e) {
+        log.error("AuthenticationException", e);
+        return ErrorResponse.toResponseEntity(ErrorCode.UNAUTHORIZED, e.getMessage());
+    }
 
     @ExceptionHandler(BusinessException.class)
     protected ResponseEntity<?> handleBusinessException(final BusinessException e) {
