@@ -1,8 +1,8 @@
 package im.greenmate.api.domain.jwt.entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
-import jakarta.validation.constraints.NotBlank;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -18,9 +18,10 @@ public class RefreshToken {
     @Id
     private String username;
 
-    @NotBlank
+    @Column(nullable = false)
     private String refreshToken;
 
+    @Column(nullable = false)
     private Date expiredAt;
 
     @Builder
@@ -28,5 +29,11 @@ public class RefreshToken {
         this.username = username;
         this.refreshToken = refreshToken;
         this.expiredAt = expiredAt;
+    }
+
+    public RefreshToken updateValue(String refreshToken, Date expiredAt) {
+        this.refreshToken = refreshToken;
+        this.expiredAt = expiredAt;
+        return this;
     }
 }

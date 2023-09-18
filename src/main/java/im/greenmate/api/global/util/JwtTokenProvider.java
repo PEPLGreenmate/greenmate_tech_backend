@@ -42,34 +42,46 @@ public class JwtTokenProvider {
 
     public TokenInfo generateToken(Authentication authentication) {
         long now = new Date().getTime();
-        String accessToken = createAccessToken(authentication, now);
-        String refreshToken = createRefreshToken(now);
+        Date accessTokenExpiredAt = createAccessTokenExpirationTime(now);
+        Date refreshTokenExpiredAt = createRefreshTokenExpirationTime(now);
+
+        String accessToken = createAccessToken(authentication, accessTokenExpiredAt);
+        String refreshToken = createRefreshToken(refreshTokenExpiredAt);
 
         return TokenInfo.builder()
                 .grantType("Bearer")
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
+                .accessTokenExpiredAt(accessTokenExpiredAt)
+                .refreshTokenExpiredAt(refreshTokenExpiredAt)
                 .build();
     }
 
-    private String createRefreshToken(long now) {
+    private Date createAccessTokenExpirationTime(long now) {
+        return new Date(now + accessTokenValidityInMilliseconds);
+    }
+
+    private Date createRefreshTokenExpirationTime(long now) {
+        return new Date(now + refreshTokenValidityInMilliseconds);
+    }
+
+    private String createRefreshToken(Date expireDate) {
         return Jwts.builder()
                 .setIssuer(issuer)
-                .setExpiration(new Date(now + refreshTokenValidityInMilliseconds))
+                .setExpiration(expireDate)
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
     }
 
-    private String createAccessToken(Authentication authentication, long now) {
+    private String createAccessToken(Authentication authentication, Date expireDate) {
         String authorities = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(","));
-        Date accessTokenExpiresIn = new Date(now + accessTokenValidityInMilliseconds);
         return Jwts.builder()
                 .setHeaderParam(Header.TYPE, Header.JWT_TYPE)
                 .claim("auth", authorities)
                 .setIssuer(issuer)
-                .setExpiration(accessTokenExpiresIn)
+                .setExpiration(expireDate)
                 .setSubject(authentication.getName())
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();

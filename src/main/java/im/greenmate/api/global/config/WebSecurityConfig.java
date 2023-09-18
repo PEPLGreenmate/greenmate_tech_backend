@@ -1,16 +1,20 @@
 package im.greenmate.api.global.config;
 
-import im.greenmate.api.global.util.JwtTokenProvider;
 import im.greenmate.api.global.security.JwtAuthenticationFilter;
+import im.greenmate.api.global.security.UserDetailsServiceImpl;
+import im.greenmate.api.global.util.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
@@ -19,7 +23,6 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.List;
-import java.util.stream.Stream;
 
 @Configuration
 @EnableWebSecurity
@@ -27,10 +30,12 @@ import java.util.stream.Stream;
 public class WebSecurityConfig {
 
     private final JwtTokenProvider jwtTokenProvider;
+    private final UserDetailsServiceImpl userDetailsService;
 
-    private static final String[] PERMIT_ALL_PATTERNS = new String[]{
-            "/"
-    };
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -42,14 +47,17 @@ public class WebSecurityConfig {
                 .sessionManagement(sessionManagement -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(request -> request
                         .requestMatchers(PathRequest.toH2Console()).permitAll()
+                        .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
                         .requestMatchers(
-                                Stream.of(PERMIT_ALL_PATTERNS)
-                                        .map(AntPathRequestMatcher::antMatcher)
-                                        .toArray(AntPathRequestMatcher[]::new)
+                                AntPathRequestMatcher.antMatcher("/"),
+                                AntPathRequestMatcher.antMatcher(HttpMethod.POST, "/api/auth/signup"),
+                                AntPathRequestMatcher.antMatcher(HttpMethod.POST, "/api/auth/login"),
+                                AntPathRequestMatcher.antMatcher(HttpMethod.POST, "/api/auth/reissue")
                         ).permitAll()
                         .requestMatchers(AntPathRequestMatcher.antMatcher("/api/**")).authenticated()
                 )
                 .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class)
+                .userDetailsService(userDetailsService)
                 .build();
     }
 
