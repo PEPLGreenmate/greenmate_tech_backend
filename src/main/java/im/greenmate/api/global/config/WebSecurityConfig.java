@@ -50,8 +50,9 @@ public class WebSecurityConfig {
                         .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
                         .requestMatchers(
                                 AntPathRequestMatcher.antMatcher("/"),
-                                AntPathRequestMatcher.antMatcher(HttpMethod.POST, "/api/users"),
-                                AntPathRequestMatcher.antMatcher(HttpMethod.POST, "/api/users/login")
+                                AntPathRequestMatcher.antMatcher(HttpMethod.POST, "/api/auth/signup"),
+                                AntPathRequestMatcher.antMatcher(HttpMethod.POST, "/api/auth/login"),
+                                AntPathRequestMatcher.antMatcher(HttpMethod.POST, "/api/auth/reissue")
                         ).permitAll()
                         .requestMatchers(AntPathRequestMatcher.antMatcher("/api/**")).authenticated()
                 )

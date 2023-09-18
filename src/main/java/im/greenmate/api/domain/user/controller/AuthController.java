@@ -2,7 +2,10 @@ package im.greenmate.api.domain.user.controller;
 
 import im.greenmate.api.domain.user.dto.request.LoginRequest;
 import im.greenmate.api.domain.user.dto.request.SignupRequest;
+import im.greenmate.api.domain.user.dto.request.TokenReissueRequest;
 import im.greenmate.api.domain.user.dto.response.LoginResponse;
+import im.greenmate.api.domain.user.dto.response.TokenReissueResponse;
+import im.greenmate.api.domain.user.service.AuthReissueService;
 import im.greenmate.api.domain.user.service.UserLoginService;
 import im.greenmate.api.domain.user.service.UserSignupService;
 import jakarta.validation.Valid;
@@ -16,13 +19,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("api/users")
-public class UserController {
+@RequestMapping("api/auth")
+public class AuthController {
 
     private final UserSignupService userSignupService;
     private final UserLoginService userLoginService;
+    private final AuthReissueService authReissueService;
 
-    @PostMapping
+    @PostMapping("signup")
     public ResponseEntity<Void> signup(@RequestBody @Valid SignupRequest request) {
         userSignupService.signup(request);
         return ResponseEntity.status(HttpStatus.CREATED).build();
@@ -31,6 +35,12 @@ public class UserController {
     @PostMapping("login")
     public ResponseEntity<LoginResponse> login(@RequestBody @Valid LoginRequest request) {
         LoginResponse response = userLoginService.login(request.getUsername(), request.getPassword());
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("reissue")
+    public ResponseEntity<TokenReissueResponse> reissue(@RequestBody TokenReissueRequest request) {
+        TokenReissueResponse response = authReissueService.reissue(request);
         return ResponseEntity.ok(response);
     }
 }

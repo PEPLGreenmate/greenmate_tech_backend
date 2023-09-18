@@ -30,4 +30,10 @@ public class RefreshToken {
         this.refreshToken = refreshToken;
         this.expiredAt = expiredAt;
     }
+
+    public RefreshToken updateValue(String refreshToken, Date expiredAt) {
+        this.refreshToken = refreshToken;
+        this.expiredAt = expiredAt;
+        return this;
+    }
 }
