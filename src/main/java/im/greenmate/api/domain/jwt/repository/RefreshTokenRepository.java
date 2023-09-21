@@ -25,8 +25,4 @@ public class RefreshTokenRepository {
     public boolean existsByKey(String key) {
         return Boolean.TRUE.equals(redisTemplate.hasKey(key));
     }
-
-    public void deleteByKey(String key) {
-        redisTemplate.delete(key);
-    }
 }

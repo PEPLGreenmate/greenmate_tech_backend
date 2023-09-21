@@ -63,6 +63,7 @@ class LocalRedisConfig {
                 pidInfo.append(line);
             }
         } catch (Exception e) {
+            e.printStackTrace();
         }
 
         return StringUtils.hasText(pidInfo.toString());
