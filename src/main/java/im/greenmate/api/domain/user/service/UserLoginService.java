@@ -2,7 +2,6 @@ package im.greenmate.api.domain.user.service;
 
 import im.greenmate.api.domain.jwt.dto.TokenInfo;
 import im.greenmate.api.domain.jwt.entity.RefreshToken;
-import im.greenmate.api.domain.jwt.repository.RefreshTokenRepository;
 import im.greenmate.api.domain.user.dto.response.LoginResponse;
 import im.greenmate.api.global.util.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;

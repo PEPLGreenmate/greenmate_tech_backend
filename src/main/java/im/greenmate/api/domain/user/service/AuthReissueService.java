@@ -2,7 +2,6 @@ package im.greenmate.api.domain.user.service;
 
 import im.greenmate.api.domain.jwt.dto.TokenInfo;
 import im.greenmate.api.domain.jwt.entity.RefreshToken;
-import im.greenmate.api.domain.jwt.repository.RefreshTokenRepository;
 import im.greenmate.api.domain.user.dto.request.TokenReissueRequest;
 import im.greenmate.api.domain.user.dto.response.TokenReissueResponse;
 import im.greenmate.api.domain.user.exception.InvalidRefreshTokenException;
