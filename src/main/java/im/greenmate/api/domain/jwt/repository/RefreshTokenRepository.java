@@ -7,15 +7,15 @@ import org.springframework.stereotype.Service;
 import java.util.concurrent.TimeUnit;
 
 @Service
-public class RedisRepository {
+public class RefreshTokenRepository {
 
     private final RedisTemplate<String, Object> redisTemplate;
 
-    public RedisRepository(RedisTemplate<String, Object> redisTemplate) {
+    public RefreshTokenRepository(RedisTemplate<String, Object> redisTemplate) {
         this.redisTemplate = redisTemplate;
     }
 
-    public void setData(RefreshToken refreshToken) {
+    public void save(RefreshToken refreshToken) {
         String key = refreshToken.getRefreshToken();
         String value = refreshToken.getUsername();
         long expiredTime = refreshToken.getExpiredAt().getTime();

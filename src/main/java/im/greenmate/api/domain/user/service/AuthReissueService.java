@@ -2,10 +2,10 @@ package im.greenmate.api.domain.user.service;
 
 import im.greenmate.api.domain.jwt.dto.TokenInfo;
 import im.greenmate.api.domain.jwt.entity.RefreshToken;
+import im.greenmate.api.domain.jwt.repository.RefreshTokenRepository;
 import im.greenmate.api.domain.user.dto.request.TokenReissueRequest;
 import im.greenmate.api.domain.user.dto.response.TokenReissueResponse;
 import im.greenmate.api.domain.user.exception.InvalidRefreshTokenException;
-import im.greenmate.api.domain.user.exception.RefreshTokenNotFoundException;
 import im.greenmate.api.global.util.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
@@ -26,26 +26,24 @@ public class AuthReissueService {
             throw new InvalidRefreshTokenException();
         }
 
-        // 2. Access Token 에서 username 가져오기
-        Authentication authentication = jwtTokenProvider.getAuthentication(tokenDto.getAccessToken());
-
-        // 3. 저장소에서 Member ID 를 기반으로 Refresh Token 값 가져옴
-        RefreshToken refreshToken = refreshTokenRepository.findByUsername(authentication.getName())
-                .orElseThrow(RefreshTokenNotFoundException::new);
-
-        // 4. Refresh Token 일치하는지 검사
-        if (!refreshToken.getRefreshToken().equals(tokenDto.getRefreshToken())) {
+        if (refreshTokenRepository.existsByKey(tokenDto.getRefreshToken())) {
             throw new InvalidRefreshTokenException();
         }
 
-        // 5. 새로운 토큰 생성
+        Authentication authentication = jwtTokenProvider.getAuthentication(tokenDto.getAccessToken());
+        String username = jwtTokenProvider.getUsername(tokenDto.getAccessToken());
+        if (!username.equals(authentication.getName())) {
+            throw new InvalidRefreshTokenException();
+        }
+
+        RefreshToken refreshToken = RefreshToken.builder()
+                .refreshToken(tokenDto.getRefreshToken())
+                .username(username)
+                .expiredAt(jwtTokenProvider.getExpirationDate(tokenDto.getRefreshToken()))
+                .build();
+        refreshTokenRepository.save(refreshToken);
+
         TokenInfo tokenInfo = jwtTokenProvider.generateToken(authentication);
-
-        // 6. 저장소 정보 업데이트
-        RefreshToken newRefreshToken =
-                refreshToken.updateValue(tokenInfo.getRefreshToken(), tokenInfo.getRefreshTokenExpiredAt());
-        refreshTokenRepository.save(newRefreshToken);
-
         return TokenReissueResponse.of(tokenInfo);
     }
 }
