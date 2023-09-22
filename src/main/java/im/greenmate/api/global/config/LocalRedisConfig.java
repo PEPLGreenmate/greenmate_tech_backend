@@ -14,7 +14,7 @@ import java.io.InputStreamReader;
 
 @Profile({"dev", "test"})
 @Configuration
-class LocalRedisConfig {
+public class LocalRedisConfig {
 
     @Value("${spring.data.redis.port}")
     private Integer redisPort;
