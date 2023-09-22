@@ -1,12 +1,14 @@
 package im.greenmate.api.domain.user.controller;
 
 import im.greenmate.api.domain.user.dto.request.LoginRequest;
+import im.greenmate.api.domain.user.dto.request.LogoutRequest;
 import im.greenmate.api.domain.user.dto.request.SignupRequest;
 import im.greenmate.api.domain.user.dto.request.TokenReissueRequest;
 import im.greenmate.api.domain.user.dto.response.LoginResponse;
 import im.greenmate.api.domain.user.dto.response.TokenReissueResponse;
 import im.greenmate.api.domain.user.service.AuthReissueService;
 import im.greenmate.api.domain.user.service.UserLoginService;
+import im.greenmate.api.domain.user.service.UserLogoutService;
 import im.greenmate.api.domain.user.service.UserSignupService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +26,7 @@ public class AuthController {
 
     private final UserSignupService userSignupService;
     private final UserLoginService userLoginService;
+    private final UserLogoutService userLogoutService;
     private final AuthReissueService authReissueService;
 
     @PostMapping("signup")
@@ -42,5 +45,11 @@ public class AuthController {
     public ResponseEntity<TokenReissueResponse> reissue(@RequestBody TokenReissueRequest request) {
         TokenReissueResponse response = authReissueService.reissue(request);
         return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("logout")
+    public ResponseEntity<Void> logout(@RequestBody LogoutRequest request) {
+        userLogoutService.logout(request);
+        return ResponseEntity.ok().build();
     }
 }

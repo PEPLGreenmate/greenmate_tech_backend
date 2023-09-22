@@ -3,6 +3,7 @@ package im.greenmate.api.domain.user.service;
 import im.greenmate.api.domain.jwt.dto.TokenInfo;
 import im.greenmate.api.domain.jwt.entity.RefreshToken;
 import im.greenmate.api.domain.jwt.repository.RefreshTokenRepository;
+import im.greenmate.api.domain.user.dto.request.LogoutRequest;
 import im.greenmate.api.domain.user.dto.request.TokenReissueRequest;
 import im.greenmate.api.domain.user.dto.response.TokenReissueResponse;
 import im.greenmate.api.domain.user.exception.InvalidRefreshTokenException;
@@ -13,15 +14,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class AuthReissueService {
 
     private final RefreshTokenRepository refreshTokenRepository;
     private final JwtTokenProvider jwtTokenProvider;
 
-    @Transactional
     public TokenReissueResponse reissue(TokenReissueRequest tokenDto) {
-        // 1. Refresh Token 검증
         if (!jwtTokenProvider.validateToken(tokenDto.getRefreshToken())) {
             throw new InvalidRefreshTokenException();
         }
@@ -45,5 +45,15 @@ public class AuthReissueService {
 
         TokenInfo tokenInfo = jwtTokenProvider.generateToken(authentication);
         return TokenReissueResponse.of(tokenInfo);
+    }
+
+    public void logout(LogoutRequest request) {
+        String username = jwtTokenProvider.getUsername(request.getRefreshToken());
+        RefreshToken refreshToken = RefreshToken.builder()
+                .refreshToken(request.getRefreshToken())
+                .username(username)
+                .expiredAt(jwtTokenProvider.getExpirationDate(request.getRefreshToken()))
+                .build();
+        refreshTokenRepository.save(refreshToken);
     }
 }
