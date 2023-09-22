@@ -4,14 +4,13 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 public class UserDetailsImpl implements UserDetails {
 
-    private Account account;
-    private List<String> roles = new ArrayList<>();
+    private final Account account;
+    private final List<String> roles;
 
     public UserDetailsImpl(Account account, List<String> roles) {
         this.account = account;

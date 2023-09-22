@@ -46,7 +46,7 @@ public class JwtTokenProvider {
         Date refreshTokenExpiredAt = createRefreshTokenExpirationTime(now);
 
         String accessToken = createAccessToken(authentication, accessTokenExpiredAt);
-        String refreshToken = createRefreshToken(refreshTokenExpiredAt);
+        String refreshToken = createRefreshToken(authentication, refreshTokenExpiredAt);
 
         return TokenInfo.builder()
                 .grantType("Bearer")
@@ -65,9 +65,10 @@ public class JwtTokenProvider {
         return new Date(now + refreshTokenValidityInMilliseconds);
     }
 
-    private String createRefreshToken(Date expireDate) {
+    private String createRefreshToken(Authentication authentication, Date expireDate) {
         return Jwts.builder()
                 .setIssuer(issuer)
+                .setSubject(authentication.getName())
                 .setExpiration(expireDate)
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
@@ -132,5 +133,13 @@ public class JwtTokenProvider {
             log.info("JWT claims string is empty.", e);
         }
         return false;
+    }
+
+    public Date getExpirationDate(String refreshToken) {
+        return parseClaims(refreshToken).getExpiration();
+    }
+
+    public String getUsername(String token) {
+        return parseClaims(token).getSubject();
     }
 }
