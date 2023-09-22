@@ -2,11 +2,11 @@ package im.greenmate.api.domain.jwt.repository;
 
 import im.greenmate.api.domain.jwt.entity.RefreshToken;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Repository;
 
 import java.util.concurrent.TimeUnit;
 
-@Service
+@Repository
 public class RefreshTokenRepository {
 
     private final RedisTemplate<String, Object> redisTemplate;

@@ -42,13 +42,13 @@ public class AuthController {
     }
 
     @PostMapping("reissue")
-    public ResponseEntity<TokenReissueResponse> reissue(@RequestBody TokenReissueRequest request) {
+    public ResponseEntity<TokenReissueResponse> reissue(@RequestBody @Valid TokenReissueRequest request) {
         TokenReissueResponse response = authReissueService.reissue(request);
         return ResponseEntity.ok(response);
     }
 
     @PostMapping("logout")
-    public ResponseEntity<Void> logout(@RequestBody LogoutRequest request) {
+    public ResponseEntity<Void> logout(@RequestBody @Valid LogoutRequest request) {
         userLogoutService.logout(request);
         return ResponseEntity.ok().build();
     }

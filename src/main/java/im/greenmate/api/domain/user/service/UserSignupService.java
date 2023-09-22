@@ -40,11 +40,12 @@ public class UserSignupService {
     }
 
     private User createUser(SignupRequest signupDto) {
+        String encryptedPassword = passwordEncoder.encode(signupDto.getPassword());
         return User.builder()
                 .role(Role.ROLE_USER)
                 .nickname(signupDto.getNickname())
                 .username(signupDto.getUsername())
-                .password(passwordEncoder.encode(signupDto.getPassword()))
+                .password(encryptedPassword)
                 .build();
     }
 }
