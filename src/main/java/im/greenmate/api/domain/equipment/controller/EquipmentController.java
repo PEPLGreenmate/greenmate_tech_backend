@@ -1,24 +1,38 @@
 package im.greenmate.api.domain.equipment.controller;
 
-import im.greenmate.api.domain.equipment.dto.SensorDataRequest;
+import im.greenmate.api.domain.equipment.EquipmentMemoryRepository;
+import im.greenmate.api.domain.equipment.dto.SensorData;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDateTime;
 
 @Slf4j
-@Controller
+@RestController
+@RequiredArgsConstructor
 @RequestMapping("api/equipments")
 public class EquipmentController {
 
+    private final EquipmentMemoryRepository equipmentMemoryRepository;
+
     @PostMapping
-    @ResponseBody
-    public ResponseEntity<String> sendInformation(@RequestBody SensorDataRequest request) {
-        log.info("request: {}", request);
-        String requestString = request.toString();
-        return ResponseEntity.ok(requestString);
+    public String sendInformation(@RequestBody SensorData request) {
+        equipmentMemoryRepository.save(request);
+        return request.toString();
+    }
+
+    @GetMapping
+    public String viewInformation() {
+        SensorData sensorData = equipmentMemoryRepository.findData();
+        if (sensorData == null) {
+            return "최근에 전송된 데이터가 없습니다.";
+        }
+        else {
+            LocalDateTime lastUpdatedTime = equipmentMemoryRepository.findLastUpdatedTime();
+            String updatedTime = "최종 업데이트 = " + lastUpdatedTime.toString() + "\n";
+            String dataString = sensorData.toString();
+            return updatedTime + dataString;
+        }
     }
 }
