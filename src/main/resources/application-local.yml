@@ -1,0 +1,43 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:test
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+
+  data:
+    redis:
+      host: localhost
+      port: 6379
+
+  jpa:
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        format_sql: true
+    show-sql: true
+
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+      settings:
+        web-allow-others: true
+
+  security:
+    user:
+      name: test
+      password: test
+      roles: USER, ADMIN
+
+logging.level:
+  org.hibernate:
+    orm.jdbc.bind: trace
+    type: trace
+
+jwt:
+  secret: testjwtsecret124testjwtsecret124testjwtsecret124testjwtsecret
+  access-token-expiration-seconds: 7200 # 2시간
+  refresh-token-expiration-seconds: 1209600 # 2주
+  issuer: im.greenmate

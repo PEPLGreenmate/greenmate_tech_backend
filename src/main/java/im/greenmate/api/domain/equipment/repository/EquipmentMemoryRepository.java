@@ -1,4 +1,4 @@
-package im.greenmate.api.domain.equipment;
+package im.greenmate.api.domain.equipment.repository;
 
 import im.greenmate.api.domain.equipment.dto.SensorData;
 import org.springframework.stereotype.Repository;

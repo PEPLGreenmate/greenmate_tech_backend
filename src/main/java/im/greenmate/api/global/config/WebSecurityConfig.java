@@ -55,7 +55,8 @@ public class WebSecurityConfig {
                                 AntPathRequestMatcher.antMatcher(HttpMethod.POST, "/api/auth/reissue"),
                                 AntPathRequestMatcher.antMatcher(HttpMethod.POST, "/api/auth/logout"),
                                 AntPathRequestMatcher.antMatcher(HttpMethod.POST, "/api/equipments"),
-                                AntPathRequestMatcher.antMatcher(HttpMethod.GET, "/api/equipments")
+                                AntPathRequestMatcher.antMatcher(HttpMethod.GET, "/api/equipments"),
+                                AntPathRequestMatcher.antMatcher(HttpMethod.GET, "/api/plant")
                         ).permitAll()
                         .requestMatchers(AntPathRequestMatcher.antMatcher("/api/**")).authenticated()
                 )

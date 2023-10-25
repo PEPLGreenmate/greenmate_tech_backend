@@ -1,12 +1,13 @@
 package im.greenmate.api.domain.equipment.controller;
 
-import im.greenmate.api.domain.equipment.EquipmentMemoryRepository;
 import im.greenmate.api.domain.equipment.dto.SensorData;
+import im.greenmate.api.domain.equipment.repository.EquipmentMemoryRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Slf4j
 @RestController
@@ -30,7 +31,9 @@ public class EquipmentController {
         }
         else {
             LocalDateTime lastUpdatedTime = equipmentMemoryRepository.findLastUpdatedTime();
-            String updatedTime = "최종 업데이트 = " + lastUpdatedTime.toString() + "\n";
+            String parsedLocalDateTimeNow = lastUpdatedTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+
+            String updatedTime = "최종 업데이트 = " + parsedLocalDateTimeNow + "\n";
             String dataString = sensorData.toString();
             return updatedTime + dataString;
         }
