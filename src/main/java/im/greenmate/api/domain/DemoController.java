@@ -87,8 +87,9 @@ public class DemoController {
     }
 
     private LuminousState getLuminousState(int luminous) {
-        if (luminous < 100) return LuminousState.DARK;
-        else if (luminous < 500) return LuminousState.NORMAL;
+        // 33% -> 800, 66% -> 1500
+        if (luminous < 33) return LuminousState.DARK;
+        else if (luminous < 66) return LuminousState.NORMAL;
         else return LuminousState.BRIGHT;
     }
 
