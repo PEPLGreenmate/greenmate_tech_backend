@@ -13,7 +13,7 @@ public class LoginResponse {
     private String accessToken;
     private String refreshToken;
 
-    public static LoginResponse of(TokenInfo tokenDto) {
+    public static LoginResponse from(TokenInfo tokenDto) {
         return LoginResponse.builder()
                 .grantType(tokenDto.getGrantType())
                 .accessToken(tokenDto.getAccessToken())
