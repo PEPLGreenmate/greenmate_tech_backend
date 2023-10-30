@@ -20,6 +20,7 @@ public class DemoController {
     @GetMapping
     public DemoResponse getInformation() {
         SensorData data = equipmentMemoryRepository.findData();
+        LocalDateTime lastUpdatedTime = equipmentMemoryRepository.findLastUpdatedTime();
 
         TemperatureState temperatureState = getTemperatureState(data.getTemp());
         HumidityState humidityState = getHumidityState(data.getHumi());
@@ -35,7 +36,7 @@ public class DemoController {
                 .humidityState(humidityState)
                 .luminousState(luminousState)
                 .groundHumidityState(groundHumidityState)
-                .lastUpdatedTime(LocalDateTime.now())
+                .lastUpdatedTime(lastUpdatedTime)
                 .build();
     }
 
